@@ -303,4 +303,26 @@ var _ = Describe("Trinary", func() {
 			Expect(TritsToInt(AddTrits(IntToTrits(-100), IntToTrits(-20)))).To(Equal(int64(-120)))
 		})
 	})
+
+	Context("AsciiToTrytes()", func() {
+		It("should correctly convert a given ascii string to a string having only tryte alphabets", func() {
+			test1, _ := AsciiToTrytes("Some random string")
+			test2, _ := AsciiToTrytes("1234567890")
+			test3, _ := AsciiToTrytes("!@#$%^&*()")
+			Expect(test1).To(Equal("BCCDADTCEAFDPCBDSCCDADEAGDHDFDXCBDVC"))
+			Expect(test2).To(Equal("VAWAXAYAZA9BABBBCBUA"))
+			Expect(test3).To(Equal("FAJBHAIAJAMCKAOAMANA"))
+		})
+	})
+
+	Context("TrytesToAscii()", func() {
+		It("should correctly convert a given Trytes object back to ascii strings", func() {
+			test1, _ := TrytesToAscii("BCCDADTCEAFDPCBDSCCDADEAGDHDFDXCBDVC")
+			test2, _ := TrytesToAscii("VAWAXAYAZA9BABBBCBUA")
+			test3, _ := TrytesToAscii("FAJBHAIAJAMCKAOAMANA")
+			Expect(test1).To(Equal("Some random string"))
+			Expect(test2).To(Equal("1234567890"))
+			Expect(test3).To(Equal("!@#$%^&*()"))
+		})
+	})
 })

@@ -419,3 +419,50 @@ func AddTrits(a Trits, b Trits) Trits {
 	}
 	return out
 }
+
+/*
+ *  AsciiToTrytes converts an ASCII encoded string to Trytes.
+ *
+ *      The function takes in a string with ASCII encoded characters and converts represents
+ *  each ASCII character using a set of two letters from the Tryte alphabet (9ABCDEFGHIJKLMNOPQRSTUVWXYZ)
+ *  Since the tryte alphabet consists of 27 symbols, the ASCII value is converted to base 27 digits. The
+ *  least significant base 27 digit is represented first, followed by the most significant digit.
+ */
+
+func AsciiToTrytes(input string) (Trytes, error) {
+	tryteString := []rune{}
+	tryteAlphabet := []rune(TryteAlphabet)
+	for _, char := range []rune(input) {
+		ascii := int(char)
+		ones := ascii % 27
+		threes := (ascii - ones) / 27
+		tryteString = append(tryteString, tryteAlphabet[ones])
+		tryteString = append(tryteString, tryteAlphabet[threes])
+	}
+	return NewTrytes(string(tryteString))
+}
+
+// TrytesToAscii converts a trinary.Trytes object to an ASCII encoded string.
+func TrytesToAscii(input Trytes) (string, error) {
+	err := ValidTrytes(input)
+	if err != nil {
+		return input, err
+	}
+
+	tryteRunes := []rune(input)
+	strRunes := []rune{}
+	alphabetMap := make(map[rune]int)
+
+	for num, char := range []rune(TryteAlphabet) {
+		alphabetMap[char] = num
+	}
+
+	for i := 0; i < len(tryteRunes)-1; i += 2 {
+		j := alphabetMap[tryteRunes[i]]
+		j += alphabetMap[tryteRunes[i+1]] * 27
+		strRunes = append(strRunes, rune(j))
+	}
+	str := strings.Trim(string(strRunes), string(0))
+	return str, err
+}
+
